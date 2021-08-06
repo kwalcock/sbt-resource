@@ -16,18 +16,52 @@ ThisBuild / licenses := List(
 ThisBuild / organization := "org.clulab"
 ThisBuild / organizationHomepage := Some(url("http://clulab.org/"))
 ThisBuild / organizationName := "Computational Language Understanding (CLU) Lab"
+// The sonatype plugin seems to overwrite these two values.
 ThisBuild / pomIncludeRepository := { _ => false }
 ThisBuild / publishMavenStyle := true
+$if(artifactory.truthy)$
 ThisBuild / publishTo := {
+  // For artifactory, use this code.
   val artifactory = "http://artifactory.cs.arizona.edu:8081/artifactory/"
   val repository = "sbt-release-local"
   val details =
       if (isSnapshot.value) ";build.timestamp=" + new java.util.Date().getTime
       else ""
   val location = artifactory + repository + details
+  val realm = "Artifactory Realm"
 
-  Some("Artifactory Realm" at location)
+  Some(realm at location)
 }
+//ThisBuild / publishTo := {
+//  // For maven, use this code.
+//  val nexus = "https://oss.sonatype.org/"
+//  if (isSnapshot.value)
+//    Some("snapshots" at nexus + "content/repositories/snapshots")
+//  else
+//    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+//}
+$else$
+//ThisBuild / publishTo := {
+//  // For artifactory, use this code.
+//  val artifactory = "http://artifactory.cs.arizona.edu:8081/artifactory/"
+//  val repository = "sbt-release-local"
+//  val details =
+//    if (isSnapshot.value) ";build.timestamp=" + new java.util.Date().getTime
+//    else ""
+//  val location = artifactory + repository + details
+//  val realm = "Artifactory Realm"
+//
+//  Some(realm at location)
+//}
+ThisBuild / publishTo := {
+  // For maven, use this code.
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
+$endif$
 ThisBuild / scmInfo := Some(
   ScmInfo(
     url(s"https://github.com/clulab/\$publication"),
