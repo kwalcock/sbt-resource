@@ -4,7 +4,7 @@ ThisBuild / developers := List(
   Developer(
     id    = "mihai.surdeanu",
     name  = "Mihai Surdeanu",
-    email = "mihai@surdeanu.info",
+    email = "msurdeanu@email.arizona.edu",
     url   = url("https://www.cs.arizona.edu/person/mihai-surdeanu")
   )
 )
@@ -19,49 +19,32 @@ ThisBuild / organizationName := "Computational Language Understanding (CLU) Lab"
 // The sonatype plugin seems to overwrite these two values.
 ThisBuild / pomIncludeRepository := { _ => false }
 ThisBuild / publishMavenStyle := true
-$if(artifactory.truthy)$
 ThisBuild / publishTo := {
-  // For artifactory, use this code.
-  val artifactory = "http://artifactory.cs.arizona.edu:8081/artifactory/"
-  val repository = "sbt-release-local"
-  val details =
+  val useArtifactory = $if(artifactory.truthy)$true$else$false$endif$
+
+  if (useArtifactory) {
+    val realm = "Artifactory Realm"
+    val provider = "http://artifactory.cs.arizona.edu:8081/artifactory/"
+    val repository = "sbt-release-local"
+    val details =
       if (isSnapshot.value) ";build.timestamp=" + new java.util.Date().getTime
       else ""
-  val location = artifactory + repository + details
-  val realm = "Artifactory Realm"
+    val location = provider + repository + details
 
-  Some(realm at location)
+    Some((realm at location).withAllowInsecureProtocol(true))
+  }
+  else {
+    val realm = if (isSnapshot.value) "snapshots" else "releases"
+    val provider = "https://oss.sonatype.org/"
+    val repository = ""
+    val details =
+      if (isSnapshot.value) "content/repositories/snapshots"
+      else "service/local/staging/deploy/maven2"
+    val location = provider + repository + details
+
+    Some(realm at location)
+  }
 }
-//ThisBuild / publishTo := {
-//  // For maven, use this code.
-//  val nexus = "https://oss.sonatype.org/"
-//  if (isSnapshot.value)
-//    Some("snapshots" at nexus + "content/repositories/snapshots")
-//  else
-//    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-//}
-$else$
-//ThisBuild / publishTo := {
-//  // For artifactory, use this code.
-//  val artifactory = "http://artifactory.cs.arizona.edu:8081/artifactory/"
-//  val repository = "sbt-release-local"
-//  val details =
-//    if (isSnapshot.value) ";build.timestamp=" + new java.util.Date().getTime
-//    else ""
-//  val location = artifactory + repository + details
-//  val realm = "Artifactory Realm"
-//
-//  Some(realm at location)
-//}
-ThisBuild / publishTo := {
-  // For maven, use this code.
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-$endif$
 ThisBuild / scmInfo := Some(
   ScmInfo(
     url(s"https://github.com/clulab/\$publication"),
@@ -74,13 +57,16 @@ ThisBuild / Compile / packageDoc / publishArtifact := false // There is no docum
 ThisBuild / Compile / packageSrc / publishArtifact := false // There is no source code.
 ThisBuild / Test    / packageBin / publishArtifact := false
 
-// Please add your credentials to ~/.sbt/.credentials rather than recording them in this build.sbt file.
-credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
-// The credentials are recorded in a separate file, without the leading "// ", as such:
-// realm=Artifactory Realm
-// host=artifactory.cs.arizona.edu
+// Please add your credentials to ~/.sbt/<version>/credentials.sbt in lines that looks like this:
+// credentials += Credentials("<realm>", "<host>", "<user>", "<password>")
+
+// Alternatively, place the credentials in a file ~/.sbt/.credentials-<name> and refer to the file here:
+// credentials += Credentials(Path.userHome / ".sbt" / ".credentials-<name>")
+// The file should be formatted like a Java properties file:
+// realm=<realm>
+// host=<host>
 // user=<user>
 // password=<password>
 
-// Please do not used them in a line like this:
-// credentials += Credentials("Artifactory Realm", "artifactory.cs.arizona.edu", "me", "my_exposed_password")
+// Example realms: Artifactory Realm, Sonatype Nexus Repository Manager
+// Example hosts: artifactory.cs.arizona.edu, oss.sonatype.org
