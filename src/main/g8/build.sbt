@@ -37,7 +37,7 @@ Compile / packageBin := {
     import java.io.{FileInputStream, FileOutputStream, ByteArrayOutputStream}
     import java.util.zip.{CRC32, ZipEntry, ZipInputStream, ZipOutputStream}
 
-    println(s" Start (re)packaging ${file.getName} with zero compression...")
+    println(s" Start (re)packaging \${file.getName} with zero compression...")
     val zipInputStream = new ZipInputStream(new FileInputStream(file))
     val tmpFile = new File(file.getAbsolutePath + "_decompressed")
     val zipOutputStream = new ZipOutputStream(new FileOutputStream(tmpFile))
@@ -66,12 +66,12 @@ Compile / packageBin := {
     zipOutputStream.close
     zipInputStream.close
     if (!file.delete())
-      println(s"The file ${file.getName} could not be deleted!")
+      println(s"The file \${file.getName} could not be deleted!")
     else
       if (!tmpFile.renameTo(file))
-        println(s"The file ${file.getName} could not be renamed!")
+        println(s"The file \${file.getName} could not be renamed!")
       else
-        println(s"Finish (re)packaging ${file.getName} with zero compression...")
+        println(s"Finish (re)packaging \${file.getName} with zero compression...")
     file
   }).value
 }

@@ -8,7 +8,7 @@ ThisBuild / developers := List(
     url   = url("https://www.cs.arizona.edu/person/mihai-surdeanu")
   )
 )
-ThisBuild / homepage := Some(url(s"https://github.com/clulab/$publication"))
+ThisBuild / homepage := Some(url(s"https://github.com/clulab/\$publication"))
 ThisBuild / licenses := List(
   "Apache License, Version 2.0" ->
       url("http://www.apache.org/licenses/LICENSE-2.0.html")
@@ -30,8 +30,8 @@ ThisBuild / publishTo := {
 }
 ThisBuild / scmInfo := Some(
   ScmInfo(
-    url(s"https://github.com/clulab/$publication"),
-    s"scm:git@github.com:clulab/$publication.git"
+    url(s"https://github.com/clulab/\$publication"),
+    s"scm:git@github.com:clulab/\$publication.git"
   )
 )
 

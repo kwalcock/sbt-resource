@@ -30,8 +30,8 @@ ThisBuild / publishTo := {
 }
 ThisBuild / scmInfo := Some(
   ScmInfo(
-    url(s"https://github.com/clulab/$publication"),
-    s"scm:git@github.com:clulab/$publication.git"
+    url(s"https://github.com/clulab/\$publication"),
+    s"scm:git@github.com:clulab/\$publication.git"
   )
 )
 
