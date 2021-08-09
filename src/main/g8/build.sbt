@@ -34,14 +34,19 @@ Compile / packageBin / mappings := {
 
 // See https://github.com/earldouglas/xsbt-web-plugin/issues/115.
 Compile / packageBin := {
-//  val log = streams.value.log
-//  val log = sLog.value
-  val compress = false
+  //  val log = streams.value.log
+  //  val log = sLog.value
 
-  if (compress)
-    (Compile / packageBin).value
-  else
-    ((Compile / packageBin).map { file: File =>
+  ((Compile / packageBin).map { file: File =>
+    // This is inside the map because otherwise there is an error message
+    // [error] java.lang.IllegalArgumentException: Could not find proxy for val compress: Boolean
+    val compress = false
+
+    if (compress) {
+      println("It is compressing")
+      file
+    }
+    else {
       import java.io.{FileInputStream, FileOutputStream, ByteArrayOutputStream}
       import java.util.zip.{CRC32, ZipEntry, ZipInputStream, ZipOutputStream}
 
@@ -51,35 +56,35 @@ Compile / packageBin := {
       val zipOutputStream = new ZipOutputStream(new FileOutputStream(tmpFile))
       zipOutputStream.setMethod(ZipOutputStream.STORED)
       Iterator
-          .continually(zipInputStream.getNextEntry)
-          .takeWhile(zipEntry => zipEntry != null)
-          .foreach { zipEntry =>
-            val byteArrayOutputStream = new ByteArrayOutputStream
-            Iterator
-                .continually(zipInputStream.read())
-                .takeWhile(-1 !=)
-                .foreach(byteArrayOutputStream.write)
-            val bytes = byteArrayOutputStream.toByteArray
-            zipEntry.setMethod(ZipEntry.STORED)
-            zipEntry.setSize(byteArrayOutputStream.size)
-            zipEntry.setCompressedSize(byteArrayOutputStream.size)
-            val crc = new CRC32
-            crc.update(bytes)
-            zipEntry.setCrc(crc.getValue)
-            zipOutputStream.putNextEntry(zipEntry)
-            zipOutputStream.write(bytes)
-            zipOutputStream.closeEntry
-            zipInputStream.closeEntry
-          }
+        .continually(zipInputStream.getNextEntry)
+        .takeWhile(zipEntry => zipEntry != null)
+        .foreach { zipEntry =>
+          val byteArrayOutputStream = new ByteArrayOutputStream
+          Iterator
+            .continually(zipInputStream.read())
+            .takeWhile(-1 !=)
+            .foreach(byteArrayOutputStream.write)
+          val bytes = byteArrayOutputStream.toByteArray
+          zipEntry.setMethod(ZipEntry.STORED)
+          zipEntry.setSize(byteArrayOutputStream.size)
+          zipEntry.setCompressedSize(byteArrayOutputStream.size)
+          val crc = new CRC32
+          crc.update(bytes)
+          zipEntry.setCrc(crc.getValue)
+          zipOutputStream.putNextEntry(zipEntry)
+          zipOutputStream.write(bytes)
+          zipOutputStream.closeEntry
+          zipInputStream.closeEntry
+        }
       zipOutputStream.close
       zipInputStream.close
       if (!file.delete())
         println(s"The file \${file.getName} could not be deleted!")
+      else if (!tmpFile.renameTo(file))
+        println(s"The file \${file.getName} could not be renamed!")
       else
-        if (!tmpFile.renameTo(file))
-          println(s"The file \${file.getName} could not be renamed!")
-        else
-          println(s"Finish (re)packaging \${file.getName} with zero compression...")
+        println(s"Finish (re)packaging \${file.getName} with zero compression...")
       file
-    }).value
+    }
+  }).value
 }
