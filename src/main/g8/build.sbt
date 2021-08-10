@@ -16,7 +16,7 @@ ThisBuild / crossPaths := false
 Compile / packageBin / mappings := {
 
   def mkMapping(filename: String): (File, String) = {
-    file(filename) -> ("$package;format="packaged"$/" + filename)
+    file(filename) -> s"$package;format="packaged"$/\$filename"
   }
 
   // Remove placeholder files (.gitempty).
@@ -86,3 +86,5 @@ Compile / packageBin := {
     }
   }).value
 }
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.5" % Test // up to 3.2.5
