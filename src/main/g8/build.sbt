@@ -1,5 +1,4 @@
 name := "$name$"
-description := "$description$"
 
 val scala11 = "2.11.12" // up to 2.11.12
 val scala12 = "2.12.13" // up to 2.12.13
@@ -16,7 +15,7 @@ ThisBuild / crossPaths := false
 Compile / packageBin / mappings := {
 
   def mkMapping(filename: String): (File, String) = {
-    file(filename) -> s"$package;format="packaged"$/filename"
+    file(filename) -> s"$package;format="packaged"$/\$filename"
   }
 
   // Remove placeholder files (.gitempty).
