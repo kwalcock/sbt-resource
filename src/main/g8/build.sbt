@@ -16,7 +16,9 @@ ThisBuild / crossPaths := false
 Compile / packageBin / mappings := {
 
   def mkMapping(filename: String): (File, String) = {
-    file(filename) -> s"$package;format="packaged"$/\$filename"
+    // package;format="packaged" results in backlashes and
+    // syntax errors on Windows, so this is converted manually.
+    file(filename) -> ("$package$".replace('.', '/') + "/\$filename")
   }
 
   // Remove placeholder files (.gitempty).
