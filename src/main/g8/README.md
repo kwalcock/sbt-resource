@@ -1,5 +1,7 @@
 # $name$
 
+$description$
+
 This directory contains an `sbt` project intended to release resources to either maven or artifactory, the later particularly when the resource is quite large (over 1GB).
 
 Instructions:
