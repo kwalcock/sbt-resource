@@ -16,7 +16,7 @@ ThisBuild / crossPaths := false
 Compile / packageBin / mappings := {
 
   def mkMapping(filename: String): (File, String) = {
-    file(filename) -> s"$package;format="packaged"$/\$filename"
+    file(filename) -> s"$package;format="packaged"$/filename"
   }
 
   // Remove placeholder files (.gitempty).
