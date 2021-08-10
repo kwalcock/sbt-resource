@@ -4,7 +4,7 @@ Thhis directory contains an `sbt` project intended to release resources to eithe
 
 Instructions:
 
-1. Overwrite the placeholder resource at ./src/main/resources/$package;format="packaged"$/$resource$ with a copy of your own resource.
+1. Overwrite the placeholder resource at `./src/main/resources/$package;format="packaged"$/$resource$` with a copy of your own resource.
 2. Run `sbt test` to ensure that the resource is accessible.
 3. Update `version.sbt` and `CHANGES.md` and check on the `LICENSE`.
 4. Inspect `publish.sbt` and replace values where necessary with those of your own project.
