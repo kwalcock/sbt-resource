@@ -6,7 +6,7 @@ To use this project as a template for an `sbt` project, do not clone it, but ins
 ```
 $ sbt new http://github.com/clulab/sbt-resource.g8.git
 ```
-and when prompted, give values for `name`, `description`, `package`, and `ressource`.  Then specify whether it is `artifactory` or `maven` that should be used to publish the resource and whether or not the `jar` file should be compressed.  This should result in an `sbt` project called `<name>` in the current directory of your hard drive.  Overwrite the placeholder resource at `src/main/resources/<package>/<resource>` with a copy of your own resource.  Files from there will be added to the `jar` file that gets published.  The project's `README.md` file should explain the steps of that process, but you will want to remove the instructions and instead describe your resource.
+and when prompted, give values for `name`, `package`, `ressource`, and `explanation`.  Then specify whether it is `artifactory` or `maven` that should be used to publish the resource and whether or not the `jar` file should be compressed.  This should result in an `sbt` project called `<name>` in the current directory of your hard drive.  Overwrite the placeholder resource at `src/main/resources/<package>/<resource>` with a copy of your own resource.  Files from there will be added to the `jar` file that gets published.  The project's `README.md` file should explain the steps of that process, but you will want to remove the instructions and instead describe your resource.
 
 If you want to modify how the template gets generated, then do clone the project from `github` and change what you'd like.  Test it by running `g8` from `sbt` and finding the results in the `./target/g8` directory.
 ```
