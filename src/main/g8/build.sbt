@@ -18,7 +18,7 @@ Compile / packageBin / mappings := {
   def mkMapping(filename: String): (File, String) = {
     // package;format="packaged" results in backlashes and
     // syntax errors on Windows, so this is converted manually.
-    file(filename) -> ("$package$".replace('.', '/') + "/\$filename")
+    file(filename) -> ("$package$".replace('.', '/') + s"/\$filename")
   }
 
   // Remove placeholder files (.gitempty).
