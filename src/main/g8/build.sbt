@@ -1,4 +1,5 @@
 name := "$name$"
+description := "$explanation$"
 
 val scala11 = "2.11.12" // up to 2.11.12
 val scala12 = "2.12.13" // up to 2.12.13
