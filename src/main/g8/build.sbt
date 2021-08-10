@@ -16,7 +16,7 @@ ThisBuild / crossPaths := false
 Compile / packageBin / mappings := {
 
   def mkMapping(filename: String): (File, String) = {
-    file("./" + filename) -> filename //
+    file(filename) -> ("$package;format="packaged"$/" + filename)
   }
 
   // Remove placeholder files (.gitempty).
@@ -40,12 +40,10 @@ Compile / packageBin := {
   ((Compile / packageBin).map { file: File =>
     // This is inside the map because otherwise there is an error message
     // [error] java.lang.IllegalArgumentException: Could not find proxy for val compress: Boolean
-    val compress = false
+    val compress = $if(compress.truthy)$true$else$false$endif$
 
-    if (compress) {
-      println("It is compressing")
+    if (compress)
       file
-    }
     else {
       import java.io.{FileInputStream, FileOutputStream, ByteArrayOutputStream}
       import java.util.zip.{CRC32, ZipEntry, ZipInputStream, ZipOutputStream}
