@@ -2,7 +2,7 @@
 
 This is a [Giter8](http://foundweekends.org/giter8) template for creating an `sbt` project that manages publication of resources for the [CLU Lab](http://github.com/clulab).  Being for resources, there is no building involved beyond the zipping up of the files into a jar so that it can be readily accessed by Scala/Java.  It is specifically for the CLU Lab because it includes URLs to the lab's [Artifactory](http://artifactory.cs.arizona.edu:8081/artifactory/webapp/#/home) and [Sonatype](https://oss.sonatype.org/index.html#nexus-search;quick~clulab) servers, which wouldn't work for other groups.
 
-To use this project as an `sbt` project, do not clone it, but instead run
+To use this template as an `sbt` project, do not clone it, but instead run
 ```
 $ sbt new http://github.com/clulab/sbt-resource.g8.git
 ```
