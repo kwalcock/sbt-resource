@@ -13,6 +13,7 @@ Compile / packageBin / mappings := {
 
   // Put these files next to the model, in part so they don't conflict with other dependencies.
   filtered ++ Seq(
+    // Do this if the files should be moved to the package directory.
     mkMapping("README.md"),
     mkMapping("CHANGES.md"),
     mkMapping("LICENSE")
