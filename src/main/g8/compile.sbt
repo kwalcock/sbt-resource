@@ -40,6 +40,7 @@ Compile / packageBin := {
       val zipInputStream = new ZipInputStream(new FileInputStream(file))
       val tmpFile = new File(file.getAbsolutePath + "_decompressed")
       val zipOutputStream = new ZipOutputStream(new FileOutputStream(tmpFile))
+      val buffer = new Array[Byte](10240)
       zipOutputStream.setMethod(ZipOutputStream.STORED)
       Iterator
         .continually(zipInputStream.getNextEntry)
@@ -47,9 +48,11 @@ Compile / packageBin := {
         .foreach { zipEntry =>
           val byteArrayOutputStream = new ByteArrayOutputStream
           Iterator
-            .continually(zipInputStream.read())
+            .continually(zipInputStream.read(buffer, 0, buffer.length))
             .takeWhile(-1 !=)
-            .foreach(byteArrayOutputStream.write)
+            .foreach { count =>
+              byteArrayOutputStream.write(buffer, 0, count)
+            }
           val bytes = byteArrayOutputStream.toByteArray
           zipEntry.setMethod(ZipEntry.STORED)
           zipEntry.setSize(byteArrayOutputStream.size)
